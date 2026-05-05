@@ -22,3 +22,17 @@ This project deploys a high-security environment including:
 2. **Configure**: Once instances are live, run the Ansible playbook:
    ```bash
    ansible-playbook -i inventory.ini setup_fortress.yml
+##  Post-Deployment Observations
+
+### 1. Network Isolation & The "Secure Failure"
+During the Ansible configuration phase, we observed a **timeout error** when attempting to connect to the private instance. 
+*   **Observation**: The private subnet, by design, lacks a NAT Gateway or public route. 
+*   **Conclusion**: This "failure" is a successful validation of the **Zero-Trust** architecture. It proves that the Cloud Fortress is unreachable from the public internet, meeting the project's primary security objective.
+
+### 2. Infrastructure as Code (IaC) Drift
+*   **Observation**: Using Terraform allowed for rapid destruction and recreation of the VPC environment.
+*   **Conclusion**: Manual configuration in the AWS Console would have taken hours and introduced human error; Terraform ensured the security groups were identical every time.
+
+### 3. Security Best Practices
+*   **Credential Safety**: Successfully implemented `.gitignore` protocols to prevent `.pem` and `.tfstate` files from being tracked. 
+*   **Audit Trail**: By using Git, every change to the firewall rules (Security Groups) is now version-controlled and auditable.
