@@ -1,0 +1,28 @@
+---
+- name: Configure the Cloud Fortress Web Server
+  hosts: fortress
+  become: yes
+  tasks:
+    - name: Install Nginx
+      dnf:
+        name: nginx
+        state: present
+
+    - name: Start and enable Nginx
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Create the Fortress Landing Page
+      copy:
+        content: |
+          <html>
+          <body style="background-color: #1a1a1a; color: #00ff00; font-family: sans-serif; text-align: center; padding-top: 50px;">
+            <h1>🛡️ Cloud Fortress Active 🛡️</h1>
+            <p>Protected by WAF | Managed by Terraform & Ansible</p>
+            <hr style="width: 50%; border: 1px solid #00ff00;">
+            <p>System Status: SECURE</p>
+          </body>
+          </html>
+        dest: /usr/share/nginx/html/index.html
